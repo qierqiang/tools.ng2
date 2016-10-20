@@ -1,0 +1,32 @@
+@shadow :1px 1px 3px black;
+.dashboard {
+    width: 800px;
+    // height: 300px;
+    margin: 100px auto;
+    .dashitem {
+        text-align: center;
+        vertical-align: center;
+        font-size: 28px;
+        cursor: pointer;
+        .glyphicon {
+            font-size: 128px;
+            color: #00D2CA;
+            margin: 0 auto;
+        }
+        .dashitem-title {
+            color: white;
+            border-radius: 5px;
+            padding: 0 6px 6px 6px;
+        }
+        &:hover {
+            .glyphicon {
+                color: #e71e62;
+                text-shadow: @shadow;
+            }
+            .dashitem-title {
+                background-color: #e71e62;
+                box-shadow: @shadow;
+            }
+        }
+    }
+}

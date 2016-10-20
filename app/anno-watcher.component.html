@@ -1,0 +1,19 @@
+<div class="modal fade" id="annoDialog" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">交警公告</h4>
+			</div>
+			<div class="modal-body">
+				<div *ngIf="items" id="anno-list" class="list-group">
+                    <a *ngFor="let a of items" href="{{a.link}}" class="list-group-item" target="_blank">{{a.title}}</a>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" (click)="test()"><span class="glyphicon glyphicon-refresh"></span></button>
+				<button type="button" class="btn btn-default" (click)="openOriginPage()"><span class="glyphicon glyphicon-new-window"></span></button>
+			</div>
+		</div>
+	</div>
+</div>

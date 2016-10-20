@@ -1,0 +1,19 @@
+	<div class="log container">
+		<div class="row">
+			<div class=" col-md-8 col-md-offset-2">
+				<div class="panel panel-default">
+					<div class="panel-heading">日志
+						<button type="button" class="close" (click)="clearLogs()"><span class="glyphicon glyphicon-trash"></span></button>
+					</div>
+					<div class="panel-body">
+						<dl id="log" class="dl-horizontal">
+                            <div *ngFor="let l of getLogs()">
+                            <dt>{{l.time}}</dt>
+                            <dd [ngClass]="{'text-success': l.type === 'success', 'text-danger': l.type === 'error'}">{{l.content}}</dd>
+                            </div>
+						</dl>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
