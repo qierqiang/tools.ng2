@@ -18,8 +18,9 @@ export abstract class Watcher {
      */
     start(): void {
         clearInterval(this._timerHandle);
-        this._timerHandle = setInterval(this.test(), this.interval);
+        this._timerHandle = setInterval(() => this.test(), this.interval);
         console.log("监测已启动。");
+        this.test();
     }
     
     /**

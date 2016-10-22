@@ -6,7 +6,6 @@ import { Observable         } from 'rxjs';
 import { Watcher            } from './watcher';
 import { logger             } from './logger.component';
 import { lsHelper           } from './localStorage-helper';
-// import { AnnoService        } from './anno.service';
 import { annoConfig         } from './watchers.config'
 import 'rxjs/add/operator/toPromise';
 
@@ -14,7 +13,6 @@ import 'rxjs/add/operator/toPromise';
     selector:       'anno-watcher',
     templateUrl:    'app/anno-watcher.component.html',
     styleUrls:      [`app/anno-watcher.component.css`],
-    // providers:      [AnnoService]
 })
 
 @Injectable()
@@ -35,7 +33,7 @@ export class AnnoWatcherComponent extends Watcher implements OnInit {
 
     test(): void {
         //查询公告
-        logger.log("开始查询交警公告", "info");
+        // logger.log("开始查询交警公告", "info");
         let url: string = this.url_domain + this.href_annos;
         this.http.get(url).toPromise()
             .then(res => {
@@ -73,7 +71,7 @@ export class AnnoWatcherComponent extends Watcher implements OnInit {
                         });
                     }
                 }
-            }).catch(this.handleError);
+            }).catch(err => { logger.log(err.message, "error") });
     }
 
     /**
@@ -105,13 +103,5 @@ export class AnnoWatcherComponent extends Watcher implements OnInit {
      */
     public openOriginPage(): void {
         window.open(this.url_domain + this.href_annos);
-    }
-
-    /**
-     * 错误处理
-     */
-    private handleError(error: any): Promise<any> {
-        console.error('查询交警公告失败！', error); // for demo purposes only
-        return Promise.reject(error.message || error);
     }
 }

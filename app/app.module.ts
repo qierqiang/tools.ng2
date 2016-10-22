@@ -5,7 +5,6 @@ import { HttpModule             } from '@angular/http';
 import { AppComponent           } from './app.component';
 import { DashboardComponent     } from './dashboard.component';
 import { LoggerComponent        } from './logger.component';
-import { LoggerService          } from './logger.service';
 import { TodoWatcherComponent   } from './todo-watcher.component';
 import { AnnoWatcherComponent   } from './anno-watcher.component';
 import { WaterReminderComponent } from './water-reminder.component';
@@ -19,7 +18,6 @@ import { WaterReminderComponent } from './water-reminder.component';
                   AnnoWatcherComponent,
                   WaterReminderComponent],
   bootstrap:    [ AppComponent ],
-  providers:    [ LoggerService ]
 })
 
 export class AppModule { }
