@@ -1,11 +1,13 @@
 export class Flower {
 
-    private today: any = new Date();
+    private today:              any     = new Date();
 
-    public wateredDate: any = new Date(2016, 7, 30);
-    public wateredDaysToNow: number = 0;
-    public wet: number = 0;
-    public dry: number = 100;
+    public wateredDate:         any     = new Date(2016, 7, 30);
+    public wateredDaysToNow:    number  = 0;
+    public wet:                 string  = "0%";
+    public dry:                 string  = "100%";
+    public description:         string  = "";
+    public descriptionHtml:     string  = "";
 
     constructor(public name: string,
         public period: number,
@@ -30,16 +32,27 @@ export class Flower {
         //设置干湿程度
         let days = (this.today - this.wateredDate) / 1000 / 60 / 60 / 24;
         if (days > (this.period + this.offSet)) {
-            this.wet = 0;
-            this.dry = 100;
+            this.wet = "0%";
+            this.dry = "100%";
         } else {
-            this.dry = (days / (this.period + this.offSet)) * 100;
-            this.wet = 100 - this.dry;
+            let tmp = (days / (this.period + this.offSet)) * 100;
+            this.dry = tmp + "%";
+            this.wet = (100 - tmp) + "%";
         }
+        this.updateDescription();
     }
     
     //标记今天已浇水
     setWateredDate(): void {
         localStorage.setItem(this.id, this.today.toString());
+        this.updateDescription();
+    }
+
+    private updateDescription() {
+        this.description = `${this.name}\t${this.id}\r\n\r\n上次浇水是${this.wateredDaysToNow}天前\r\n每${this.period}±${this.offSet}天浇一次`;
+        if (this.note && this.note.length > 0) {
+            this.description += "\r\n\r\n" + this.note;
+        }
+        this.descriptionHtml = this.description.replace("\r\n", "<br>",);
     }
 }

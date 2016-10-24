@@ -32,7 +32,7 @@ export class TodoWatcherComponent extends Watcher implements OnInit {
         this.http.post(url, data, {headers: new Headers({'Content-Type': 'application/json'})}).toPromise()
             .then(res => {
                 let arr: string[] = [];
-                $(res).find("a").each(() => arr.push($(this).attr("title")));
+                $(res.json().d).find("a").each((i, o) => arr.push($(o).attr("title")));
                 this.items = arr;
                 //对比关键字
                 for (let t of this.items) {
@@ -45,7 +45,7 @@ export class TodoWatcherComponent extends Watcher implements OnInit {
                     }
                 }
                 logger.log("查询待办完成", "info");
-            }).catch(err => { logger.log(err.message, "error") });
+            }).catch(err => { logger.log("查询待办失败！", "error"); });
     }
 
     /**
