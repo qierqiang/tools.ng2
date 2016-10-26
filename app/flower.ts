@@ -20,7 +20,9 @@ export class Flower {
         this.today = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
     }
 
-    //取得上次浇水日期
+    /**
+     * 取得上次浇水日期
+     */
     getWateredDate(): void {
         let val = localStorage.getItem(this.id);
         if (val != undefined) {
@@ -28,8 +30,6 @@ export class Flower {
             this.wateredDate = new Date(this.wateredDate.getFullYear(), this.wateredDate.getMonth(), this.wateredDate.getDate());
         }
         this.wateredDaysToNow = Math.round((this.today - this.wateredDate) / 1000 / 60 / 60 / 24);
-        
-        //设置干湿程度
         let days = (this.today - this.wateredDate) / 1000 / 60 / 60 / 24;
         if (days > (this.period + this.offSet)) {
             this.wet = "0%";
@@ -42,12 +42,17 @@ export class Flower {
         this.updateDescription();
     }
     
-    //标记今天已浇水
+    /**
+     * 标记今天已浇水
+     */
     setWateredDate(): void {
         localStorage.setItem(this.id, this.today.toString());
-        this.updateDescription();
+        this.getWateredDate();
     }
-
+    
+    /**
+     * 更新描述信息
+     */
     private updateDescription() {
         this.description = `${this.name}\t${this.id}\r\n\r\n上次浇水是${this.wateredDaysToNow}天前\r\n每${this.period}±${this.offSet}天浇一次`;
         if (this.note && this.note.length > 0) {

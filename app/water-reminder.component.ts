@@ -1,5 +1,6 @@
 /// <reference path="../typings/jquery/jquery.d.ts" />
 import { Component, OnInit  } from '@angular/core';
+import { Http, Response     } from '@angular/http';
 import { Flower             } from './flower';
 
 @Component({
@@ -33,9 +34,16 @@ export class WaterReminderComponent implements OnInit {
         new Flower("香龙血树", 7, 512, 414, "f19", "", 2, true),
         new Flower("测试", 3, 330, 190, "f20", "虚构出来用于测试的花", 1, false)];
 
-        public toWater: Flower[]  = [];
+        public toWater: Flower[]    = [];
+        public hoverId: string      = "";
+        public humidity: string     = "#错误#";
         
-    constructor() { }
+    constructor(private http: Http) { 
+        for (let f of this.flowers)
+        {
+            f.x = f.x - 7;
+        }
+    }
 
     ngOnInit() { 
         //今日要浇水
@@ -44,6 +52,35 @@ export class WaterReminderComponent implements OnInit {
             f.getWateredDate();
             if (f.wateredDaysToNow + nextWaterDay > f.period) {
                 this.toWater.push(f);
+            }
+        }
+        //湿度
+        this.diplayHumidity();
+    }
+
+    /**
+     * 显示湿度
+     */
+    diplayHumidity(): void {
+        let url = "http://tianqi.2345.com/today-58321.htm";
+        this.http.get(url).toPromise().then((res) => {
+            let tmp = parseInt(res.text().match(/\d+%</)[0].replace("%<", ""));
+            this.humidity = tmp + "%";
+        });
+    }
+
+    /**
+     * 标记已浇水
+     * @param {string} id ID
+     */
+    water(id: string): void {
+        if (confirm("浇过水了吗？")) {
+            for (let f of this.flowers) {
+                if (f.id === id) {
+                    f.setWateredDate();
+                    this.toWater.splice(this.toWater.indexOf(f), 1);
+                    return;
+                }
             }
         }
     }

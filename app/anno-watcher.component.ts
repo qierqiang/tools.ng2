@@ -9,6 +9,13 @@ import { lsHelper           } from './localStorage-helper';
 import { annoConfig         } from './watchers.config'
 import 'rxjs/add/operator/toPromise';
 
+interface Announcement {
+    href: string;
+    title: string;
+    link: string;
+    keyword?: string;
+}
+
 @Component({
     selector:       'anno-watcher',
     templateUrl:    'app/anno-watcher.component.html',
@@ -18,7 +25,7 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class AnnoWatcherComponent extends Watcher implements OnInit {
 
-    public items: { href: string, title: string, link: string, keyword: string }[];
+    public items: Announcement[];
 
     readonly url_domain: string = "http://www.hfjjzd.gov.cn";
     readonly href_annos: string = "/zhuzhan/jwgk/";
@@ -37,7 +44,7 @@ export class AnnoWatcherComponent extends Watcher implements OnInit {
         let url: string = this.url_domain + this.href_annos;
         this.http.get(url).toPromise()
             .then(res => {
-                let arr: any[] = [];
+                let arr: Announcement[] = [];
                 $(res.text()).find(".liebiangaoqilaile2_kaishil2 ul li a").each((i, a) => {
                     let href = a.getAttribute("href");
                     arr.push({ "href": href, "title": a.textContent, "link": this.url_domain + href });
@@ -45,14 +52,13 @@ export class AnnoWatcherComponent extends Watcher implements OnInit {
                 this.items = arr;
 
                 //通知
-                let foundList: { href: string, title: string, link: string, keyword: string }[] = [];
+                let foundList: Announcement[] = [];
                 for (let a of arr) {
                     //关键字
                     for (let w of this.keywords) {
                         if (a.title.indexOf(w) >= 0) {
                             //是否已读
-                            let href: string = a.href;
-                            if (!this.getIsRead(href)) {
+                            if (!this.getIsRead(a.href)) {
                                 a.keyword = w;
                                 foundList.push(a);
                             }
@@ -65,7 +71,7 @@ export class AnnoWatcherComponent extends Watcher implements OnInit {
                     for(let a of foundList) {
                         logger.log(`交警公告发现关键字：[${a.keyword}]`, "success");
                         this.notify("交警公告", a.title, (n) =>{
-                            window.open(url);
+                            window.open(a.link);
                             this.setIsRead(a.href);
                             n.close();
                         });
